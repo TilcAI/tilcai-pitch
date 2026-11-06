@@ -132,7 +132,7 @@ export function SketchOverlay({ clock, subtitles }: { clock: FilmClock; subtitle
 
       <div className="fx-title intertitle">
         <div className="intertitle-frame">
-          <p className="intertitle-who">TilcAI presenta</p>
+          <p className="intertitle-who">Función de estreno</p>
           <p className="intertitle-text is-title">El aniversario olvidado</p>
           <Ornament />
           <p className="intertitle-foot">Una comedia en diez actos · MCMXXVI</p>
@@ -173,7 +173,7 @@ export function SketchOverlay({ clock, subtitles }: { clock: FilmClock; subtitle
 
       <div className="fx-mandate">
         <div className="phone-ui is-modern">
-          <p className="ui-store">TilcAI · Mandato para Claude</p>
+          <p className="ui-store">Permiso para Claude</p>
           <dl className="ui-mandate">
             <div>
               <dt>Para</dt>

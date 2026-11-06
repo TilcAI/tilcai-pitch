@@ -56,7 +56,8 @@ export class Person {
   readonly mixer: THREE.AnimationMixer;
   private readonly actions = new Map<string, THREE.AnimationAction>();
   private readonly bones = new Map<string, THREE.Object3D>();
-  private readonly rest = new Map<THREE.Object3D, { p: THREE.Vector3; q: THREE.Quaternion; s: THREE.Vector3 }>();
+  /** Última pose del mixer, antes de los gestos adicionales de la coreografía. */
+  private readonly clipPose = new Map<THREE.Object3D, { p: THREE.Vector3; q: THREE.Quaternion; s: THREE.Vector3 }>();
   private readonly faceMat: THREE.MeshToonMaterial;
   private readonly faces = new Map<Face, THREE.CanvasTexture>();
   /** Mano derecha e izquierda: puntos donde se cuelga un objeto. */
@@ -64,6 +65,8 @@ export class Person {
   readonly handL = new THREE.Object3D();
   readonly headTop = new THREE.Object3D();
   clips: ClipCue[] = [{ at: 0, clip: "idle" }];
+  /** Corrección de colisiones en el piso (no toca la pose de la línea de tiempo). */
+  readonly push = { x: 0, z: 0 };
   face: Face = "none";
 
   private constructor(
@@ -77,7 +80,7 @@ export class Person {
     root.traverse((obj) => {
       if ((obj as THREE.Bone).isBone || ["root", ...BONES].includes(obj.name)) {
         this.bones.set(obj.name, obj);
-        this.rest.set(obj, { p: obj.position.clone(), q: obj.quaternion.clone(), s: obj.scale.clone() });
+        this.clipPose.set(obj, { p: obj.position.clone(), q: obj.quaternion.clone(), s: obj.scale.clone() });
       }
       const m = obj as THREE.SkinnedMesh;
       if (m.isMesh) {
@@ -100,9 +103,20 @@ export class Person {
     // Cara: plano delante de la cabeza (coordenadas locales del hueso «head»).
     const head = this.bones.get("head")!;
     // Con luz, como la cabeza: así el parche de piel no se nota.
-    this.faceMat = new THREE.MeshToonMaterial({ transparent: true, depthWrite: false, gradientMap: toonRamp() });
+    // Desplazamiento de profundidad: el plano siempre gana frente a la cabeza y no titila
+    // (z-fighting) cuando se mueve la cámara.
+    this.faceMat = new THREE.MeshToonMaterial({
+      transparent: true,
+      depthWrite: false,
+      gradientMap: toonRamp(),
+      polygonOffset: true,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -8,
+    });
     const face = new THREE.Mesh(new THREE.PlaneGeometry(0.36, 0.18), this.faceMat);
-    face.position.set(0, 0.125, 0.172);
+    // La cara del modelo está en z ≈ 0,160 (y algunos relieves en 0,168): el plano va 1,6 cm
+    // por delante para no compartir profundidad con ellos.
+    face.position.set(0, 0.125, 0.176);
     face.renderOrder = 2;
     face.layers.set(1);
     face.name = "face";
@@ -126,8 +140,10 @@ export class Person {
 
   /** Coloca el personaje en el instante `t` (segundos del sketch). */
   update(t: number) {
-    // 1) Volver a la pose de reposo: los giros extra no se acumulan entre cuadros.
-    for (const [obj, r] of this.rest) {
+    // 1) Quitar solo los gestos del cuadro anterior. El mixer omite escribir propiedades
+    // que no cambiaron: volver al reposo aquí borraría partes constantes del clip (por
+    // ejemplo, las piernas sentadas), causando saltos entre reposo y animación.
+    for (const [obj, r] of this.clipPose) {
       obj.position.copy(r.p);
       obj.quaternion.copy(r.q);
       obj.scale.copy(r.s);
@@ -143,6 +159,14 @@ export class Person {
     this.applyClip(cur, t, w);
     if (prev && w < 1) this.applyClip(prev, t, 1 - w);
     this.mixer.update(0);
+
+    // Guardar la pose base antes de sumar gestos: ni se pierden canales constantes del
+    // clip ni se acumulan giros/escala al pausar, repetir o retroceder en el sketch.
+    for (const [obj, r] of this.clipPose) {
+      r.p.copy(obj.position);
+      r.q.copy(obj.quaternion);
+      r.s.copy(obj.scale);
+    }
 
     // 3) Giros extra por hueso.
     const e = new THREE.Euler();
@@ -160,7 +184,7 @@ export class Person {
 
     // 4) Lugar en la escena y temblor.
     const shake = this.pose.shake ? Math.sin(t * 61) * 0.012 * this.pose.shake : 0;
-    this.group.position.set(this.pose.x + shake, this.pose.y, this.pose.z);
+    this.group.position.set(this.pose.x + this.push.x + shake, this.pose.y, this.pose.z + this.push.z);
     this.group.rotation.y = this.pose.ry;
 
     // 5) Cara.

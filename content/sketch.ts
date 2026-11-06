@@ -12,6 +12,9 @@ export const SKETCH_SECONDS = 90;
 /** Segundo en que entra Claude: termina el cine mudo y la imagen pasa a color de 2010. */
 export const COLOR_AT = 38.6;
 
+/** Corte del sketch: aquí se interrumpe para presentar TilcAI y luego se reanuda. */
+export const CUT_AT = 78;
+
 export const SCENES: SketchScene[] = [
   {
     n: 0,
@@ -20,10 +23,10 @@ export const SCENES: SketchScene[] = [
     to: 3,
     place: "Intertítulo",
     emotion: "Expectativa",
-    action: "Cartel de cine mudo con marco art déco: «TilcAI presenta: El aniversario olvidado».",
+    action: "Cartel de cine mudo con marco art déco: «Función de estreno: El aniversario olvidado». Sin mencionar TilcAI: se revela después del corte.",
     camera: "Cartel fijo con parpadeo de proyector.",
     sound: "Piano de cine mudo, alegre.",
-    lines: [{ at: 0, dur: 3, who: "narrador", kind: "pantalla", text: "TilcAI presenta · El aniversario olvidado", fx: "title" }],
+    lines: [{ at: 0, dur: 3, who: "narrador", kind: "pantalla", text: "Función de estreno · El aniversario olvidado", fx: "title" }],
   },
   {
     n: 1,
@@ -153,7 +156,7 @@ export const SCENES: SketchScene[] = [
       },
       { at: 69.4, dur: 3.6, who: "claude", kind: "dice", text: "Entendido. Te dejo el permiso listo para que lo apruebes." },
       { at: 73.2, dur: 1.6, who: "narrador", kind: "pantalla", text: "Mandato aprobado · máx. 50 USD · una compra", fx: "mandate" },
-      { at: 75.6, dur: 2.4, who: "esposo", kind: "piensa", text: "¡Ahhh… claro!" },
+      { at: 75.6, dur: 2.7, who: "esposo", kind: "piensa", text: "¡Ahhh… claro!" },
     ],
   },
   {
@@ -164,12 +167,11 @@ export const SCENES: SketchScene[] = [
     place: "Comedor, presente",
     emotion: "Felicidad y complicidad",
     action:
-      "Él se acomoda la ropa y finge que todo era sorpresa. Ella lo abraza. Él agradece a Claude de reojo; Claude guiña. Cierre de marca.",
-    camera: "Alejamiento a los tres, corazones y congelado final; cartel TilcAI.",
+      "Él se acomoda la ropa y finge que todo era sorpresa. Ella lo abraza. Él agradece a Claude de reojo; Claude guiña. Cuadro congelado; sigue la diapositiva de cierre.",
+    camera: "Alejamiento a los tres, corazones y congelado final.",
     sound: "Vuelve el tema romántico, ahora alegre.",
     lines: [
       { at: 78.8, dur: 3, who: "esposo", kind: "dice", text: "¡Claro! Quería que fuera una sorpresa." },
-      { at: 86.4, dur: 3.6, who: "narrador", kind: "pantalla", text: "TilcAI · Tu agente compra. Tú decides.", fx: "end" },
     ],
   },
 ];

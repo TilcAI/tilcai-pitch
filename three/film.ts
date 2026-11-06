@@ -36,11 +36,13 @@ export class FilmPass {
   private readonly normalMaterial = new THREE.MeshNormalMaterial();
 
   constructor(width = 1920, height = 1080) {
+    // Multimuestreo (MSAA 4×): sin esto los bordes, las rayas del papel tapiz y los
+    // contornos de tinta titilan en cuanto se mueve la cámara.
     const depth = new THREE.DepthTexture(width, height);
     depth.type = THREE.UnsignedIntType;
-    this.color = new THREE.WebGLRenderTarget(width, height, { depthTexture: depth, samples: 0 });
+    this.color = new THREE.WebGLRenderTarget(width, height, { depthTexture: depth, samples: 4 });
     this.color.texture.colorSpace = THREE.SRGBColorSpace;
-    this.normals = new THREE.WebGLRenderTarget(width, height);
+    this.normals = new THREE.WebGLRenderTarget(width, height, { samples: 4 });
     this.uniforms.tColor.value = this.color.texture;
     this.uniforms.tDepth.value = depth;
     this.uniforms.tNormal.value = this.normals.texture;
@@ -49,6 +51,16 @@ export class FilmPass {
       new THREE.ShaderMaterial({ uniforms: this.uniforms, vertexShader: VERT, fragmentShader: FRAG, depthTest: false, depthWrite: false }),
     );
     this.scene.add(this.quad);
+  }
+
+  /** Ajusta los buffers al tamaño real de la pantalla (píxeles del dispositivo). */
+  setSize(width: number, height: number) {
+    const w = Math.max(1, Math.round(width));
+    const h = Math.max(1, Math.round(height));
+    if (this.color.width === w && this.color.height === h) return;
+    this.color.setSize(w, h);
+    this.normals.setSize(w, h);
+    this.uniforms.uResolution.value.set(w, h);
   }
 
   render(renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.PerspectiveCamera) {
@@ -128,13 +140,16 @@ void main() {
   float inFrame = step(abs(uv.x - 0.5), halfW);
 
   // Vaivén del proyector durante el cine mudo.
-  vec2 jitter = vec2(0.0, (hash(vec2(silentT, 1.0)) - 0.5) * 0.004) * uSilent;
+  // Solo mientras la imagen es muda: apenas empieza a entrar el color se detiene, si no la
+  // parte a color también saltaría a 18 cuadros por segundo.
+  float projector = uSilent * (1.0 - smoothstep(0.0, 0.25, uReveal));
+  vec2 jitter = vec2(0.0, (hash(vec2(silentT, 1.0)) - 0.5) * 0.004) * projector;
   vec2 suv = uv + jitter;
 
   vec3 col = texture2D(tColor, suv).rgb;
 
   // Tinta: bordes por profundidad y por normales.
-  vec2 px = 1.0 / uResolution * 1.6;
+  vec2 px = 1.6 / vec2(1920.0, 1080.0);
   float dC = depthAt(suv);
   float dd = 0.0;
   vec3 nC = texture2D(tNormal, suv).rgb;
@@ -160,7 +175,7 @@ void main() {
   vec3 sepia = mix(vec3(g), vec3(g) * vec3(1.07, 0.96, 0.78), 0.75);
   float flicker = 1.0 + (hash(vec2(silentT, 7.0)) - 0.5) * 0.12;
   sepia *= flicker;
-  sepia += (hash(uv * uResolution + silentT * 91.0) - 0.5) * 0.11;
+  sepia += (hash(floor(uv * vec2(1920.0, 1080.0)) + silentT * 91.0) - 0.5) * 0.11;
   float scratchX = hash(vec2(floor(silentT * 3.0), 3.0));
   float scratch = smoothstep(0.0015, 0.0, abs(uv.x - scratchX)) * step(0.55, hash(vec2(silentT, 9.0)));
   sepia = mix(sepia, vec3(0.92, 0.86, 0.72), scratch * 0.6);

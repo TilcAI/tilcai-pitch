@@ -14,8 +14,8 @@ npm run urls         # muestra las direcciones de Tailscale
 | --- | --- |
 | `/` | La presentación. → avanzar, ← volver, F pantalla completa, P abre la ventana del guion, N notas en pantalla, A automático, T reiniciar tiempo, H ocultar barra. |
 | `/notas` | Guion sincronizado (BroadcastChannel, mismo navegador). En el sketch resalta la escena y la línea actuales, con cuenta regresiva para la siguiente voz; también controla el pitch. |
-| `/?s=2` | Empieza en la diapositiva 2 (el sketch). |
-| `/?s=2&t=38&hold` | El sketch congelado en el segundo 38 (revisar una escena). Añadir `&clean` quita la barra y la ayuda. |
+| `/?s=2` | Empieza en la diapositiva 2 (portada de TilcAI, después del corte). El sketch es la 1 (0:00–1:18) y la 11 (1:18–1:30). |
+| `/?t=38&hold` | El sketch congelado en el segundo 38 (revisar una escena). Añadir `&clean` quita la barra y la ayuda. |
 | `/?auto` | Avanza solo con los tiempos del guion (ensayo). |
 
 En el sketch: **espacio** pausa, **→ / ←** saltan de escena y **S** muestra u oculta los subtítulos.

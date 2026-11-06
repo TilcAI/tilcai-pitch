@@ -11,10 +11,12 @@ import { StageAct } from "./acts/stage";
 export class FilmClock {
   t = 0;
   playing = false;
+  /** Hasta dónde corre en la diapositiva actual (el sketch está partido en dos tramos). */
+  end = SKETCH_SECONDS;
   /** Se llama en cada cuadro con el segundo actual (para la capa HTML del sketch). */
   readonly listeners = new Set<(t: number, anchors: Record<string, Anchor>) => void>();
   play() {
-    if (this.t >= SKETCH_SECONDS) this.t = 0;
+    if (this.t >= this.end - 0.01) return;
     this.playing = true;
   }
   pause() {
@@ -53,6 +55,10 @@ export class World {
     this.sketch = new SketchAct();
     document.addEventListener("visibilitychange", this.onVisibility);
     this.frame = requestAnimationFrame(this.tick);
+    if (process.env.NODE_ENV !== "production") {
+      const g = globalThis as unknown as { __worlds?: number };
+      g.__worlds = (g.__worlds ?? 0) + 1;
+    }
   }
 
   get sketchReady() {
@@ -60,7 +66,8 @@ export class World {
   }
 
   setPixelRatio(ratio: number) {
-    this.renderer.setPixelRatio(ratio);
+    // Al menos 1: por debajo, la imagen se agranda y las líneas finas titilan.
+    this.renderer.setPixelRatio(Math.max(1, ratio));
     this.renderer.setSize(1920, 1080, false);
   }
 
@@ -77,6 +84,7 @@ export class World {
 
   dispose() {
     cancelAnimationFrame(this.frame);
+    if (process.env.NODE_ENV !== "production") (globalThis as unknown as { __worlds: number }).__worlds--;
     document.removeEventListener("visibilitychange", this.onVisibility);
     this.stage.dispose();
     this.sketch.dispose();
@@ -94,8 +102,8 @@ export class World {
     const dt = Math.min(0.1, (now - this.last) / 1000);
     this.last = now;
     if (this.mode === "sketch" && this.clock.playing) {
-      this.clock.t = Math.min(SKETCH_SECONDS, this.clock.t + dt);
-      if (this.clock.t >= SKETCH_SECONDS) this.clock.playing = false;
+      this.clock.t = Math.min(this.clock.end, this.clock.t + dt);
+      if (this.clock.t >= this.clock.end) this.clock.playing = false;
     }
     this.draw(now);
   };

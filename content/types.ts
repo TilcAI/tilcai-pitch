@@ -27,6 +27,8 @@ export interface Item {
   /** Cifra o etiqueta corta (roadmap: cuándo; evidence: valor). */
   value?: string;
   status?: Status;
+  /** Foto (equipo), ruta dentro de /public. */
+  photo?: string;
   /** Ícono simple de components/icons.tsx. */
   icon?: IconName;
 }
@@ -67,6 +69,8 @@ export interface SlideData {
   note?: string;
   footnote?: string;
   stage?: StageCue;
+  /** Sketch: tramo de la película (segundos) que muestra esta diapositiva. */
+  film?: { from: number; to: number };
   /** Guion del presentador (vista de notas). */
   script: string;
 }

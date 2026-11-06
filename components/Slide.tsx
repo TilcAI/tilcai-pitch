@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Deck, SlideData, Status } from "@/content/types";
 import { Icon } from "./icons";
-import { Rich } from "./rich";
+import { plain as plainName, Rich } from "./rich";
 
 /**
  * Una diapositiva en el lienzo de 1920 × 1080. Solo marca qué se anima y en qué orden
@@ -230,14 +230,24 @@ const layouts: Record<SlideData["layout"], (slide: SlideData, deck: Deck) => Rea
       {slide.items?.map((item, i) => (
         <li key={i} className="member">
           <span className="member-photo" data-anim="pop">
-            <Icon name="users" />
+            {item.photo ? (
+              // eslint-disable-next-line @next/next/no-img-element -- lienzo fijo
+              <img src={item.photo} alt={plainName(item.title)} />
+            ) : (
+              <Icon name="users" />
+            )}
           </span>
           <h2 data-anim="words">
             <Rich text={item.title} />
           </h2>
           {item.text && (
-            <p data-anim="words">
+            <p className="member-role" data-anim="words">
               <Rich text={item.text} />
+            </p>
+          )}
+          {item.value && (
+            <p className="member-tags" data-anim="fade">
+              {item.value}
             </p>
           )}
         </li>

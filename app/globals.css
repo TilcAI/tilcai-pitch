@@ -613,7 +613,7 @@ body {
 
 .team {
   list-style: none;
-  margin: 90px 0 0;
+  margin: 56px 0 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -624,12 +624,41 @@ body {
 .member-photo {
   display: grid;
   place-items: center;
-  width: 190px;
-  height: 190px;
-  border-radius: 50%;
+  width: 280px;
+  height: 280px;
+  border-radius: 24px;
+  overflow: hidden;
   border: 1px solid var(--linea);
   background: rgba(117, 70, 255, 0.12);
   color: var(--lila);
+}
+
+.member-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.9);
+}
+
+.member {
+  border-bottom: 2px solid var(--violeta);
+  padding-bottom: 22px;
+}
+
+.member h2 {
+  margin-top: 26px;
+}
+
+.member-role {
+  color: var(--lila) !important;
+  font-weight: 600 !important;
+}
+
+.member-tags {
+  margin: 8px 0 0;
+  font: 500 20px/1.3 var(--body);
+  letter-spacing: 0.04em;
+  color: var(--gris);
 }
 
 .member-photo .icon {
@@ -638,6 +667,39 @@ body {
 }
 
 /* ------------------------------------------------------------------ HUD */
+
+/* Controles ocultos: aparecen al pasar el mouse por el borde inferior (barra y tiempos)
+   o superior (ayuda de teclas). */
+.hud-zone,
+.help-zone {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.hud-zone {
+  bottom: 0;
+  height: 72px;
+}
+
+.help-zone {
+  top: 0;
+  height: 64px;
+  z-index: 12;
+}
+
+.hud-zone .hud,
+.help-zone .help {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.hud-zone:hover .hud,
+.help-zone:hover .help,
+.help-zone.is-pinned .help {
+  opacity: 1;
+}
 
 .hud {
   position: fixed;

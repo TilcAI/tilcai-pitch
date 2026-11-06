@@ -47,8 +47,8 @@ const OFF: Record<ActorName, Place> = {
 const HOST: Record<HostPose, { places: Partial<Record<ActorName, Place>>; mood?: Partial<Mood> }> = {
   cover: {
     places: {
-      cat: { x: 1390, y: 860, h: 560, ry: -0.42, rz: 0 },
-      clawd: { x: 1730, y: 960, h: 190, ry: -0.45, rz: 0 },
+      cat: { x: 1330, y: 860, h: 560, ry: -0.42, rz: 0 },
+      clawd: { x: 1790, y: 1000, h: 165, ry: -0.45, rz: 0 },
     },
     mood: { catTilt: 0.06 },
   },
@@ -65,8 +65,8 @@ const HOST: Record<HostPose, { places: Partial<Record<ActorName, Place>>; mood?:
   team: { places: { cat: { x: 1760, y: 1010, h: 190, ry: -0.6, rz: 0 } } },
   closing: {
     places: {
-      cat: { x: 1380, y: 880, h: 540, ry: -0.35, rz: 0 },
-      clawd: { x: 1730, y: 965, h: 210, ry: -0.45, rz: 0 },
+      cat: { x: 1320, y: 880, h: 540, ry: -0.35, rz: 0 },
+      clawd: { x: 1790, y: 1000, h: 180, ry: -0.45, rz: 0 },
     },
     mood: { catWave: 1, clawdWave: 1, clawdHappy: 1 },
   },

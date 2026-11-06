@@ -1,6 +1,6 @@
 # Guion del video — El aniversario olvidado (v2)
 
-**Formato:** sketch animado en 3D lowpoly con humor, dentro del pitch (diapositiva 2).
+**Formato:** sketch animado en 3D lowpoly con humor que **abre el pitch** y lo **parte en dos**: escenas 0–9 (diapositiva 1), corte para presentar TilcAI (diapositivas 2–10), y escena 10 (diapositiva 11) antes del cierre.
 **Duración:** 90 segundos.
 **Personajes:** esposo, esposa (personajes Kenney *mini characters*) y **Claude**, interpretado por **Clawd**, la mascota de Claude Code (modelo propio).
 **Concepto:** un esposo está a punto de arruinar su aniversario porque olvidó el regalo. Cuando todo parece perdido, Claude aparece con el regalo. Al final se descubre que el esposo le había dado, semanas antes, **un permiso con límite que él mismo aprobó**.
@@ -11,6 +11,8 @@
 
 | Cambio | Por qué |
 | --- | --- |
+| **El pitch empieza con el sketch y se corta en el «¡Ahhh… claro!»** (1:18, fin de la escena 9). Recién ahí se revela TilcAI y se presenta. Al terminar el equipo, el sketch se reanuda con la escena 10 (el esposo finge) y sigue la diapositiva de cierre. | El jurado ve el problema y la solución actuados antes de saber quién es la empresa; la escena 10 remata después de la explicación. |
+| **Sin la marca TilcAI antes del corte:** el cartel inicial dice «Función de estreno» y la tarjeta del mandato «Permiso para Claude». El cartel final del sketch se quitó: lo reemplaza la diapositiva de cierre. | No adelantar la revelación. |
 | **Estética en dos épocas.** Del inicio hasta que entra Claude (0:38.6): cine mudo de 1910–1940, sepia y blanco y negro, grano, rayas, parpadeo, 18 cuadros por segundo y cuadro 4:3. Cuando Claude cruza la puerta, el color invade la escena desde la puerta, el cuadro se abre a 16:9 y la paleta pasa a una de 2010 (saturada y cálida). | El salto de época dramatiza el mensaje: el comercio de antes contra el comercio con agentes. Además vuelve el giro visualmente inconfundible. |
 | **Diálogos de la primera mitad en intertítulos** (carteles de cine mudo). En la segunda mitad, las voces van en vivo con subtítulos opcionales (tecla S). | Coherencia con el cine mudo; el equipo puede doblar en vivo sin depender de audio grabado. |
 | **Cartel de título de 3 s** al inicio; la escena 01 empieza en 0:03 y se acortan las escenas 01 y 02 a 6 s. | Sitúa al jurado en el código de cine mudo antes de empezar. |
@@ -23,7 +25,7 @@
 
 | # | Tiempo | Escena | Qué pasa | Texto |
 | --- | --- | --- | --- | --- |
-| 0 | 0:00–0:03 | Cartel de título | Intertítulo art déco, parpadeo de proyector. | **Cartel:** «TilcAI presenta · El aniversario olvidado» |
+| 0 | 0:00–0:03 | Cartel de título | Intertítulo art déco, parpadeo de proyector. | **Cartel:** «Función de estreno · El aniversario olvidado» |
 | 1 | 0:03–0:09 | Un aniversario especial | Pareja sentada frente a frente; copas, flores y pastel. Brindan; flotan corazones. Acercamiento lento. | — |
 | 2 | 0:09–0:15 | El regalo olvidado | Ella busca su regalo con la mirada. Él abre los ojos, se congela, suda. Zoom rápido. El piano se corta (disco rayado). | **Cartel (piensa él):** «¡EL REGALO!» |
 | 3 | 0:15–0:24 | El checkout que nunca terminó | Saca el celular bajo la mesa: la compra quedó en checkout. X grande y sacudida. | **Pantalla:** «Regalo de aniversario · Pago no realizado». **Cartel (piensa él):** «¡Pero si yo había hecho el checkout!» |
@@ -32,8 +34,8 @@
 | 6 | 0:38.6–0:49 | Claude salva el día | **Cambio de época.** Clawd entra con la caja; el color nace en la puerta y cubre la escena; 4:3 → 16:9. Entrega el regalo con un rebote. Ella pasa del enojo a la emoción; él queda inmóvil. | **Claude:** «¡Perdón por llegar tarde! Aquí está el regalo que me pediste.» **Esposa:** «¡Ay, qué sorpresa!» |
 | 7 | 0:49–0:56 | ¿Yo pedí eso? | Él mira el regalo, a Claude, al regalo. Signo de interrogación. | **Burbuja (piensa él):** «Pero… yo no pedí nada…» |
 | 8 | 0:56–1:01 | El guiño | Primerísimo plano: Clawd guiña un ojo, destello. Rebobinado. | — |
-| 9 | 1:01–1:18 | Tres semanas antes | Un calendario retrocede. Recuerdo con tono lila: la sala de día. Él le deja a Claude el encargo con límite; Claude prepara el permiso; él lo aprueba en su celular. Volvemos al presente: entiende. | **Cartel:** «Tres semanas antes». **Esposo:** «Claude, si se me olvida el regalo de aniversario, encárgate tú. Hasta 50 dólares.» **Claude:** «Entendido. Te dejo el permiso listo para que lo apruebes.» **Pantalla:** «Mandato aprobado · máx. 50 USD · una compra». **Burbuja (piensa él):** «¡Ahhh… claro!» |
-| 10 | 1:18–1:30 | Todo estaba planeado | Él se acomoda la ropa, pecho afuera. Ella lo abraza. Él agradece a Claude de reojo; Claude guiña. Corazones, alejamiento, congelado. Cartel final con el gato de TilcAI. | **Esposo:** «¡Claro! Quería que fuera una sorpresa.» **Cartel:** «TilcAI · Tu agente compra. Tú decides.» |
+| 9 | 1:01–1:18 | Tres semanas antes | Un calendario retrocede. Recuerdo con tono lila: la sala de día. Él le deja a Claude el encargo con límite; Claude prepara el permiso; él lo aprueba en su celular. Volvemos al presente: entiende. | **Cartel:** «Tres semanas antes». **Esposo:** «Claude, si se me olvida el regalo de aniversario, encárgate tú. Hasta 50 dólares.» **Claude:** «Entendido. Te dejo el permiso listo para que lo apruebes.» **Pantalla (tarjeta «Permiso para Claude»):** «Mandato aprobado · máx. 50 USD · una compra». **Burbuja (piensa él):** «¡Ahhh… claro!» → **CORTE: se presenta TilcAI.** |
+| 10 | 1:18–1:30 | Todo estaba planeado *(se reanuda tras presentar TilcAI)* | Él se acomoda la ropa, pecho afuera. Ella lo abraza. Él agradece a Claude de reojo; Claude guiña. Corazones, alejamiento, congelado. | **Esposo:** «¡Claro! Quería que fuera una sorpresa.» Cuadro congelado → diapositiva de cierre «Tu agente compra. Tú decides.» |
 
 ## Indicaciones de producción
 

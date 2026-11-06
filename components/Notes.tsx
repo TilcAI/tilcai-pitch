@@ -145,7 +145,7 @@ export function Notes({ deck }: { deck: Deck }) {
   const deckNow = now + offset;
   const elapsed = deckNow - state.startedAt;
   const isSketch = slide.layout === "sketch";
-  const slideElapsed = isSketch ? filmT * 1000 : deckNow - state.slideAt;
+  const slideElapsed = isSketch ? (filmT - (slide.film?.from ?? 0)) * 1000 : deckNow - state.slideAt;
   const planned = slides.reduce((sum, s) => sum + s.seconds, 0);
   const target =
     slides.slice(0, state.index + 1).reduce((sum, s) => sum + s.seconds, 0) *

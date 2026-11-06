@@ -47,13 +47,18 @@ export function Deck({ deck, mode }: { deck: DeckData; mode: DeckMode }) {
   const [ready, setReady] = useState(false);
   const [hud, setHud] = useState(!mode.clean);
   const [notes, setNotes] = useState(false);
-  const [help, setHelp] = useState(!mode.clean);
+  /** Ayuda fijada con «?»; sin fijar, aparece al pasar el mouse por arriba. */
+  const [help, setHelp] = useState(false);
   const [auto, setAuto] = useState(mode.auto);
   const [subtitles, setSubtitles] = useState(true);
   const [startedAt, setStartedAt] = useState(() => Date.now());
   const [slideAt, setSlideAt] = useState(() => Date.now());
   const [now, setNow] = useState(() => Date.now());
   const filmClock = useMemo(() => new FilmClock(), []);
+  useEffect(() => {
+    // Solo en desarrollo: acceso al reloj del sketch para las pruebas cuadro a cuadro.
+    if (process.env.NODE_ENV !== "production") (window as unknown as { __film?: FilmClock }).__film = filmClock;
+  }, [filmClock]);
   const [film, setFilm] = useState({ t: 0, playing: false });
 
   const currentRef = useRef<HTMLDivElement>(null);
@@ -81,22 +86,24 @@ export function Deck({ deck, mode }: { deck: DeckData; mode: DeckMode }) {
   );
   const step = useCallback((delta: number) => go(viewRef.current.index + delta), [go]);
 
-  // Dentro del sketch, → y ← saltan de escena; al final, pasan de diapositiva.
+  // Dentro del sketch, → y ← saltan de escena dentro del tramo; en los bordes, pasan de
+  // diapositiva (el sketch está partido: 0–78 s antes de presentar TilcAI y 78–90 s después).
   const advance = useCallback(
     (delta: number) => {
       const current = deck.slides[viewRef.current.index];
       if (current.layout !== "sketch") return step(delta);
+      const { from, to } = filmRange(current);
       const scene = sceneAt(filmClock.t);
       if (delta > 0) {
-        const next = SCENES.find((s) => s.from > scene.from);
-        if (!next || filmClock.t >= SKETCH_SECONDS - 0.05) return step(1);
+        const next = SCENES.find((s) => s.from > scene.from && s.from < to);
+        if (!next || filmClock.t >= filmClock.end - 0.05) return step(1);
         filmClock.seek(next.from);
         filmClock.play();
       } else {
-        const inScene = filmClock.t - scene.from;
-        if (scene.n === 0 && inScene < 1) return step(-1);
-        const prev = inScene > 1.5 ? scene : SCENES[Math.max(0, SCENES.indexOf(scene) - 1)];
-        filmClock.seek(prev.from);
+        const inScene = filmClock.t - Math.max(scene.from, from);
+        if (scene.from <= from && inScene < 1) return step(-1);
+        const prev = inScene > 1.5 || scene.from <= from ? scene : SCENES[Math.max(0, SCENES.indexOf(scene) - 1)];
+        filmClock.seek(Math.max(from, prev.from));
       }
     },
     [deck.slides, filmClock, step],
@@ -163,17 +170,22 @@ export function Deck({ deck, mode }: { deck: DeckData; mode: DeckMode }) {
     return () => window.clearTimeout(delay);
   }, [ready, view.index, view.visit, view.back, deck.slides]);
 
-  // El sketch arranca al entrar y se pausa al salir.
+  // El sketch arranca al entrar (en su tramo) y se pausa al salir.
   useEffect(() => {
     if (!isSketch) {
       filmClock.pause();
       return;
     }
-    filmClock.seek(view.back ? Math.max(0, SKETCH_SECONDS - 0.01) : (mode.filmAt ?? 0));
+    const { from, to } = filmRange(deck.slides[view.index]);
+    // Un tramo que no es el final se detiene justo antes del corte de cámara.
+    filmClock.end = to >= SKETCH_SECONDS ? to : to - 0.05;
+    const at = mode.filmAt !== undefined && view.visit === 0 ? mode.filmAt : from;
+    filmClock.seek(view.back ? filmClock.end : Math.min(filmClock.end, Math.max(from, at)));
+    filmClock.pause();
     if (view.back || mode.hold) return;
     const id = window.setTimeout(() => filmClock.play(), 700);
     return () => window.clearTimeout(id);
-  }, [isSketch, view.visit, view.back, filmClock, mode.filmAt, mode.hold]);
+  }, [isSketch, view.index, view.visit, view.back, filmClock, mode.filmAt, mode.hold, deck.slides]);
 
   // La que se va sale hacia un lado y se desvanece.
   useEffect(() => {
@@ -211,7 +223,7 @@ export function Deck({ deck, mode }: { deck: DeckData; mode: DeckMode }) {
       const current = deck.slides[state.index];
       if (!state.auto || state.index >= total - 1) return;
       const done =
-        current.layout === "sketch" ? filmClock.t >= SKETCH_SECONDS - 0.01 : t - state.slideAt >= current.seconds * 1000;
+        current.layout === "sketch" ? filmClock.t >= filmClock.end - 0.01 : t - state.slideAt >= current.seconds * 1000;
       if (done) {
         state.slideAt = t;
         step(1);
@@ -315,7 +327,7 @@ export function Deck({ deck, mode }: { deck: DeckData; mode: DeckMode }) {
 
   const elapsed = now - startedAt;
   const planned = deck.slides.reduce((sum, s) => sum + s.seconds, 0);
-  const slideElapsed = isSketch ? film.t * 1000 : now - slideAt;
+  const slideElapsed = isSketch ? (film.t - filmRange(slide).from) * 1000 : now - slideAt;
   const scene = sceneAt(film.t);
 
   return (
@@ -339,6 +351,7 @@ export function Deck({ deck, mode }: { deck: DeckData; mode: DeckMode }) {
       </div>
 
       {hud && (
+        <div className="hud-zone">
         <div className="hud" aria-hidden="true">
           <div className="hud-bar">
             {deck.slides.map((s, i) => (
@@ -352,13 +365,14 @@ export function Deck({ deck, mode }: { deck: DeckData; mode: DeckMode }) {
             {isSketch && (
               <>
                 {" "}
-                · escena {scene.n} «{scene.title}» · {fmt(film.t * 1000)}/{fmt(SKETCH_SECONDS * 1000)}
+                · escena {scene.n} «{scene.title}» · {fmt(film.t * 1000)}/{fmt(filmRange(slide).to * 1000)}
                 {!film.playing && " · pausa"}
               </>
             )}{" "}
             · <b className={elapsed > planned * 1000 ? "is-late" : ""}>{fmt(elapsed)}</b> / {fmt(planned * 1000)}
             {auto && " · automático"}
           </p>
+        </div>
         </div>
       )}
 
@@ -372,14 +386,21 @@ export function Deck({ deck, mode }: { deck: DeckData; mode: DeckMode }) {
         </aside>
       )}
 
-      {help && (
-        <p className="help">
-          → avanzar · ← volver · F pantalla completa · N notas · P ventana del guion · A automático · T reiniciar tiempo · En el
-          sketch: espacio pausa, → ← escenas, S subtítulos
-        </p>
+      {!mode.clean && (
+        <div className={`help-zone${help ? " is-pinned" : ""}`}>
+          <p className="help">
+            → avanzar · ← volver · F pantalla completa · N notas · P ventana del guion · A automático · T reiniciar tiempo · En
+            el sketch: espacio pausa, → ← escenas, S subtítulos · ? fijar esta ayuda
+          </p>
+        </div>
       )}
     </div>
   );
+}
+
+/** Tramo del sketch de una diapositiva (todo el sketch si no lo indica). */
+function filmRange(slide: DeckData["slides"][number]) {
+  return slide.film ?? { from: 0, to: SKETCH_SECONDS };
 }
 
 function toggleFullscreen() {

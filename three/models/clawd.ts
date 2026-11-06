@@ -151,7 +151,7 @@ export class Clawd {
       this.legs.push(leg);
     }
 
-    this.hands.position.set(0, LEG_H + BODY_H * 0.35, BODY_D / 2 + 0.22);
+    this.hands.position.set(0, LEG_H + BODY_H * 0.35, BODY_D / 2 + 0.34);
     this.body.add(this.hands);
   }
 

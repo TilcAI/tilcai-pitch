@@ -31,6 +31,8 @@ export interface DiningSet {
 }
 
 const INK = 0x1a120d;
+/** Distancia de cada silla al centro de la mesa (las piernas no deben tocar el mantel). */
+export const CHAIR_X = 0.66;
 const DOOR_X = 1.15;
 const DOOR_W = 0.56;
 const DOOR_H = 1.05;
@@ -176,6 +178,7 @@ export function buildDiningSet(): DiningSet {
 
   // Mesa redonda con mantel.
   const table = new THREE.Group();
+  table.name = "mesa";
   const top = mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.03, 32), toon(0x6b4430));
   top.position.y = 0.31;
   inked(top, T, INK);
@@ -219,11 +222,12 @@ export function buildDiningSet(): DiningSet {
       g.add(l);
     }
     g.position.set(x, 0, 0);
+    g.name = x < 0 ? "silla-el" : "silla-ella";
     root.add(g);
     return g;
   };
-  chair(-0.56, 1);
-  chair(0.56, -1);
+  chair(-CHAIR_X, 1);
+  chair(CHAIR_X, -1);
 
   // Copas.
   const glass = () => {
@@ -254,6 +258,7 @@ export function buildDiningSet(): DiningSet {
 
   // Florero con flores.
   const vase = new THREE.Group();
+  vase.name = "florero";
   const v = mesh(new THREE.CylinderGeometry(0.035, 0.045, 0.12, 14), toon(0x2a9d8f));
   v.position.y = 0.06;
   inked(v, 0.006, INK);
@@ -276,6 +281,7 @@ export function buildDiningSet(): DiningSet {
 
   // Pastel con vela (solo de noche).
   const cake = new THREE.Group();
+  cake.name = "pastel";
   const layer1 = mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.06, 24), toon(0xf6d7e0));
   layer1.position.y = 0.03;
   inked(layer1, 0.006, INK);
@@ -300,6 +306,7 @@ export function buildDiningSet(): DiningSet {
 
   // Caja de regalo con moño.
   const gift = new THREE.Group();
+  gift.name = "regalo";
   const box = mesh(roundedBox(0.2, 0.16, 0.2, 0.012), toon(0x7546ff));
   box.position.y = 0.08;
   inked(box, 0.008, INK);
@@ -343,8 +350,8 @@ export function buildDiningSet(): DiningSet {
     candleFlame,
     windowSky: skyMat,
     spots: {
-      seatHusband: new THREE.Vector3(-0.56, seatY + 0.02, 0),
-      seatWife: new THREE.Vector3(0.56, seatY + 0.02, 0),
+      seatHusband: new THREE.Vector3(-CHAIR_X, seatY + 0.02, 0),
+      seatWife: new THREE.Vector3(CHAIR_X, seatY + 0.02, 0),
       doorway: new THREE.Vector3(doorX + doorW / 2 - 0.1, 0, wallZ + 0.25),
     },
   };
@@ -359,6 +366,8 @@ function canvasTexture(w: number, h: number, draw: (g: CanvasRenderingContext2D)
   draw(c.getContext("2d")!);
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
+  // Filtrado anisotrópico: el piso y la pared vistos en ángulo no titilan.
+  tex.anisotropy = 8;
   if (repeat) {
     tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
     tex.repeat.set(...repeat);

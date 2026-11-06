@@ -8,9 +8,20 @@ import type { Deck } from "./types";
 const deck: Deck = {
   name: "TilcAI",
   url: "tilcai.com",
-  event: "[[Nombre de la competencia]]",
+  event: "Stellar Instawards LATAM",
   videos: { claude: "/video/claude-app.mp4", vaquita: "/video/vaquita.mp4" },
   slides: [
+    {
+      id: "sketch-1",
+      section: "El aniversario olvidado",
+      layout: "sketch",
+      seconds: 78,
+      title: "El aniversario olvidado",
+      stage: { act: "sketch" },
+      film: { from: 0, to: 78 },
+      script:
+        "Arrancamos sin presentarnos: el sketch hasta el «¡Ahhh… claro!» del esposo (escena 9). Ahí cortamos y recién revelamos TilcAI. Las voces se doblan en vivo con la vista de notas. → salta de escena; espacio pausa.",
+    },
     {
       id: "portada",
       section: "TilcAI",
@@ -20,17 +31,7 @@ const deck: Deck = {
       lead: "Infraestructura de permisos y pagos para el comercio con agentes de IA.",
       stage: { act: "host", pose: "cover" },
       script:
-        "Buenas. Somos TilcAI. Antes de explicarles qué hacemos, queremos contarles una historia de aniversario. Pongan atención a quién decide qué.",
-    },
-    {
-      id: "sketch",
-      section: "El aniversario olvidado",
-      layout: "sketch",
-      seconds: 90,
-      title: "El aniversario olvidado",
-      stage: { act: "sketch" },
-      script:
-        "Sketch de 90 segundos. Las voces se doblan en vivo: la vista de notas resalta cada línea en el momento justo. → salta a la escena siguiente; espacio pausa.",
+        "Corte. Lo que acaban de ver tiene nombre: TilcAI. Claude no compró por su cuenta: compró dentro de un permiso que el esposo aprobó. Esa capa de permisos y pagos es lo que construimos.",
     },
     {
       id: "problema",
@@ -161,16 +162,29 @@ const deck: Deck = {
       id: "equipo",
       section: "Equipo",
       layout: "team",
-      seconds: 10,
-      title: "El equipo",
+      seconds: 15,
+      title: "El equipo detrás de *TilcAI.*",
+      lead: "Cuatro áreas de trabajo conectadas en una infraestructura.",
       items: [
-        { title: "[[Nombre]]", text: "[[Rol]]" },
-        { title: "[[Nombre]]", text: "[[Rol]]" },
-        { title: "[[Nombre]]", text: "[[Rol]]" },
-        { title: "[[Nombre]]", text: "[[Rol]]" },
+        { title: "Omar", text: "Agentes e integración", value: "Gateway · MCP · agentes", photo: "/team/omar.jpg" },
+        { title: "Jhamil", text: "Comercio y producto", value: "Ofertas · órdenes · negocio", photo: "/team/jhamil.jpg" },
+        { title: "Saúl", text: "Pagos y operación", value: "Relayer · x402 · pagos", photo: "/team/saul.jpg" },
+        { title: "José", text: "Wallets y permisos", value: "Cuentas · firmas · permisos", photo: "/team/jose.jpg" },
       ],
       stage: { act: "host", pose: "team" },
-      script: "[[Presentación breve del equipo.]]",
+      script:
+        "Somos cuatro, cada uno a cargo de una pieza de la misma infraestructura: Omar, agentes e integración, el gateway y el MCP; Jhamil, comercio y producto, ofertas y órdenes; Saúl, pagos y operación, el relayer y x402; y José, wallets y permisos: cuentas, firmas y límites.",
+    },
+    {
+      id: "sketch-2",
+      section: "El aniversario olvidado · final",
+      layout: "sketch",
+      seconds: 12,
+      title: "El aniversario olvidado",
+      stage: { act: "sketch" },
+      film: { from: 78, to: 90 },
+      script:
+        "Volvemos al comedor: el esposo finge que todo era sorpresa. Ahora el jurado ya sabe quién estaba detrás del permiso de 50 dólares.",
     },
     {
       id: "cierre",
