@@ -1,0 +1,27 @@
+{
+  "name": "tilcai-pitch",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -H 0.0.0.0 -p 3100",
+    "build": "next build",
+    "start": "next start -H 0.0.0.0 -p 3100",
+    "typecheck": "tsc --noEmit",
+    "videos": "bash scripts/placeholder-videos.sh",
+    "urls": "bash scripts/urls.sh"
+  },
+  "dependencies": {
+    "animejs": "^4.5.0",
+    "next": "16.3.8",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/three": "^0.186.0",
+    "typescript": "^5"
+  }
+}
