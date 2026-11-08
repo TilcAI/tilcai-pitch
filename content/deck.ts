@@ -4,6 +4,8 @@ import type { Deck } from "./types";
  * Texto del pitch de TilcAI para el jurado. Cambiar el texto no requiere tocar código.
  * Lo marcado con [[ ]] está por confirmar con el equipo antes de presentar.
  * Los estados técnicos salen de documentation/0-OFICIAL y 3-CONSTRUCCION (nov. 2026).
+ * Modelo de negocio, GTM, hoja de ruta y roles del equipo salen de la sección de Notion
+ * «Instawards · Paso 2 · Borradores TilcAI» (leída el 2026-11-08); ver docs/fuentes-notion.md.
  */
 const deck: Deck = {
   name: "TilcAI",
@@ -118,7 +120,7 @@ const deck: Deck = {
       title: "Lo que *ya funciona*, y lo que no prometemos todavía",
       items: [
         { status: "mainnet", title: "Avalanche → Stellar en mainnet", text: "Pagos reales de 0,01 y 1 USDC, y acreditación en Vaquita.", value: "1 USDC" },
-        { status: "verificado", title: "Fuji → Stellar en testnet", text: "CCTP V2 sin gas, con API, worker y pruebas." },
+        { status: "verificado", title: "Fuji y Monad → Stellar en testnet", text: "CCTP V2 configurado desde Avalanche Fuji y Monad Testnet, sin gas." },
         { status: "publicado", title: "tilcai-mcp y SDK", text: "Servidor MCP con credenciales rotables; SDK 0.4.0." },
         { status: "verificado", title: "Vault de desembolsos", text: "Seis desembolsos confirmados en la prueba con Optipagos." },
         { status: "laboratorio", title: "Otras redes CCTP", text: "Sepolia, Arbitrum y Base: en laboratorio, no habilitadas." },
@@ -132,31 +134,53 @@ const deck: Deck = {
       id: "negocio",
       section: "Modelo de negocio",
       layout: "cards",
-      seconds: 20,
-      title: "Cobramos cuando *la operación se completa*",
+      seconds: 25,
+      title: "La empresa paga por *integrar y operar* los cobros de agentes",
+      lead: "La empresa contrata e integra; el comprador usa su asistente y autoriza el gasto.",
       items: [
-        { icon: "bolt", title: "Comisión por operación", text: "[[x % por pago conciliado]]" },
-        { icon: "store", title: "Plan para negocios", text: "[[Suscripción: agente vendedor, catálogo y recibos]]" },
-        { icon: "agent", title: "Desarrolladores", text: "API, SDK y MCP con [[cuota gratuita y luego por volumen]]" },
+        { icon: "store", title: "Comercios con checkout", text: "Reciben pagos de agentes, los asocian a pedidos y concilian." },
+        { icon: "agent", title: "Integradores", text: "Reutilizan una integración de pagos para todos sus clientes." },
+        { icon: "bolt", title: "Implementación + operación", text: "Tarifa de implementación y suscripción con volumen incluido, frente a cobro por uso." },
+        { icon: "receipt", title: "Precio separado", text: "La tarifa de TilcAI va aparte de comisiones de red y costes de terceros." },
       ],
       stage: { act: "host", pose: "solution" },
-      script: "[[Confirmar con el equipo: precios, primer segmento y piloto. No inventar cifras de adopción.]]",
+      script:
+        "¿Quién nos paga? La empresa, no el comprador. Nuestros clientes son comercios con checkout integrable e integradores que quieren reutilizar una integración de pagos. Cobramos implementación cuando hay trabajo específico y una suscripción de operación con volumen incluido, y lo comparamos contra cobro por uso. El precio lo fijamos midiendo tiempo hasta el primer cobro conciliado, incidencias por integración y disposición a pagar.",
+    },
+    {
+      id: "gtm",
+      section: "Go-to-market",
+      layout: "flow",
+      seconds: 25,
+      title: "Del primer contacto *al primer cobro conciliado*",
+      lead: "Empezamos en Bolivia con comercios digitales e integradores que controlan su checkout.",
+      items: [
+        { icon: "chat", title: "Entrevistas", text: "Comunidad Stellar y red del equipo: el problema real de cobro." },
+        { icon: "users", title: "Eventos", text: "Hackathons, talleres y demos con universidades, cámaras e integradores." },
+        { icon: "agent", title: "Sesión técnica", text: "Demo reproducible, SDK, MCP y documentación." },
+        { icon: "shield", title: "Piloto", text: "Un comercio prueba e integra el cobro en un caso delimitado." },
+        { icon: "receipt", title: "Pago comercial", text: "Empresas únicas, denominadores y causas de abandono en cada paso." },
+      ],
+      stage: { act: "host", pose: "flow" },
+      script:
+        "Para llegar al mercado no vendemos una integración que no existe: empezamos con entrevistas de problema en la comunidad Stellar y la red del equipo, y con hackathons, talleres y demos junto a universidades, cámaras empresariales e integradores. El objetivo es una decisión verificable: una sesión técnica, un piloto y el primer cobro conciliado. Seguimos con un segmento solo si hay un problema repetido, un comprador identificable y un compromiso de integración.",
     },
     {
       id: "ruta",
       section: "Hoja de ruta",
       layout: "roadmap",
-      seconds: 15,
-      title: "Lo que sigue",
+      seconds: 25,
+      title: "Una v1 en Stellar Mainnet *en 30 días*",
       items: [
-        { value: "Hoy", title: "Pagos de agentes", text: "MCP, SDK y Avalanche → Stellar." },
-        { value: "[[Q1]]", title: "Negocio piloto", text: "Agente vendedor, catálogo y cotización." },
-        { value: "[[Q2]]", title: "x402 en Stellar", text: "Pago directo en USDC y más orígenes CCTP." },
-        { value: "[[Q3]]", title: "Bolivia", text: "Rampa BOB ↔ USDC y facturación SIN." },
+        { value: "Hoy", title: "Base probada", text: "1 USDC real Avalanche → Stellar; CCTP desde Fuji y Monad Testnet; SDK x402 y MCP." },
+        { value: "Semanas 1–2", title: "D1 · Cobro x402", text: "Endpoint en Stellar con orden, intento, estado y comprobante." },
+        { value: "Semanas 2–3", title: "D2 · SDK y MCP", text: "Pago autorizado con límites, reintentos e idempotencia." },
+        { value: "Semanas 3–4", title: "D3 · Fondeo CCTP", text: "Avalanche C-Chain → Stellar Mainnet, trazable aparte del cobro." },
+        { value: "Después", title: "Piloto y liquidez", text: "Piloto comercial y vaults prefondeados con reposición por lotes." },
       ],
       stage: { act: "host", pose: "roadmap" },
       script:
-        "Hoy los agentes ya pagan. Lo siguiente es un negocio piloto con su propio agente vendedor, después el pago directo con x402 en Stellar y, para Bolivia, la rampa a bolivianos y la facturación. [[Confirmar fechas]]",
+        "Partimos de algo probado: USDC real de Avalanche a Stellar, CCTP desde Fuji y Monad hacia Stellar Testnet, SDK y MCP. En 30 días dejamos una v1 controlada en Stellar Mainnet: un agente hace un pago x402 autorizado con USDC real mediante SDK y MCP, y la empresa verifica y concilia el cobro con su orden. El fondeo por CCTP se demuestra por separado. Después, cada fase avanza solo con resultados: piloto comercial y liquidez prefondeada por red.",
     },
     {
       id: "equipo",
@@ -164,16 +188,16 @@ const deck: Deck = {
       layout: "team",
       seconds: 15,
       title: "El equipo detrás de *TilcAI.*",
-      lead: "Cuatro áreas de trabajo conectadas en una infraestructura.",
+      lead: "Dirección, negocio, desarrollo y producto en una misma infraestructura.",
       items: [
-        { title: "Omar", text: "Agentes e integración", value: "Gateway · MCP · agentes", photo: "/team/omar.jpg" },
-        { title: "Jhamil", text: "Comercio y producto", value: "Ofertas · órdenes · negocio", photo: "/team/jhamil.jpg" },
-        { title: "Saúl", text: "Pagos y operación", value: "Relayer · x402 · pagos", photo: "/team/saul.jpg" },
-        { title: "José", text: "Wallets y permisos", value: "Cuentas · firmas · permisos", photo: "/team/jose.jpg" },
+        { title: "Saúl", text: "Fundador · CEO", value: "Dirección · demo", photo: "/team/saul.jpg" },
+        { title: "Omar", text: "Negocio y growth", value: "Clientes · postulación", photo: "/team/omar.jpg" },
+        { title: "José", text: "Desarrollo y técnica", value: "Implementación · postulación", photo: "/team/jose.jpg" },
+        { title: "Jhamil", text: "Producto y diseño", value: "Producto · demo", photo: "/team/jhamil.jpg" },
       ],
       stage: { act: "host", pose: "team" },
       script:
-        "Somos cuatro, cada uno a cargo de una pieza de la misma infraestructura: Omar, agentes e integración, el gateway y el MCP; Jhamil, comercio y producto, ofertas y órdenes; Saúl, pagos y operación, el relayer y x402; y José, wallets y permisos: cuentas, firmas y límites.",
+        "Somos cuatro: Saúl, fundador y CEO; Omar, negocio y growth; José, desarrollo y técnica; y Jhamil, producto y diseño.",
     },
     {
       id: "sketch-2",

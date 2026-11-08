@@ -14,7 +14,7 @@ npm run urls         # muestra las direcciones de Tailscale
 | --- | --- |
 | `/` | La presentación. → avanzar, ← volver, F pantalla completa, P abre la ventana del guion, N notas en pantalla, A automático, T reiniciar tiempo, H ocultar barra. |
 | `/notas` | Guion sincronizado (BroadcastChannel, mismo navegador). En el sketch resalta la escena y la línea actuales, con cuenta regresiva para la siguiente voz; también controla el pitch. |
-| `/?s=2` | Empieza en la diapositiva 2 (portada de TilcAI, después del corte). El sketch es la 1 (0:00–1:18) y la 11 (1:18–1:30). |
+| `/?s=2` | Empieza en la diapositiva 2 (portada de TilcAI, después del corte). El sketch es la 1 (0:00–1:18) y la 12 (1:18–1:30). |
 | `/?t=38&hold` | El sketch congelado en el segundo 38 (revisar una escena). Añadir `&clean` quita la barra y la ayuda. |
 | `/?auto` | Avanza solo con los tiempos del guion (ensayo). |
 
@@ -24,7 +24,7 @@ En el sketch: **espacio** pausa, **→ / ←** saltan de escena y **S** muestra 
 
 | Archivo | Contenido |
 | --- | --- |
-| `content/deck.ts` | Texto de las 11 diapositivas y guion del presentador. `[[ ]]` = por confirmar. |
+| `content/deck.ts` | Texto de las 13 diapositivas y guion del presentador. `[[ ]]` = por confirmar. |
 | `content/sketch.ts` | Guion del sketch con tiempos. Mueve **a la vez** la animación 3D, los carteles y la vista `/notas`. |
 | `guion_el_aniversario_olvidado.md` | Guion v2 legible, con los cambios respecto a la v1. |
 | `three/acts/sketch.ts` | Coreografía del sketch: una línea de tiempo de anime.js en pausa a la que se hace `seek` cada cuadro (por eso se puede pausar y saltar). |
@@ -38,7 +38,8 @@ En el sketch: **espacio** pausa, **→ / ←** saltan de escena y **S** muestra 
 ## Pendiente
 
 - **Videos reales de la demo:** reemplazar `public/video/claude-app.mp4` y `public/video/vaquita.mp4` (vertical, 540 × 1170 aprox.) o cambiar las rutas en `content/deck.ts` → `videos`. Los actuales son de relleno (`npm run videos` los regenera).
-- **Datos por confirmar** (`[[ ]]` en `content/deck.ts`): nombre de la competencia, modelo de negocio, fechas de la hoja de ruta, equipo.
+- **Narración de la demo** (`[[ ]]` en `content/deck.ts`): narrar sobre el video real.
+- **Modelo de negocio, GTM, hoja de ruta y roles del equipo** salen de Notion («Instawards · Paso 2 · Borradores TilcAI»). Cuando cambien allí, sigue [docs/fuentes-notion.md](docs/fuentes-notion.md).
 - **Música y efectos** del sketch: el guion marca dónde van; aún no hay audio.
 
 ## Revisión visual
